@@ -1,0 +1,35 @@
+#include<stdio.h>
+#define MAX 100
+#include<string.h>
+struct poly{
+    int coeff;
+    int expo;
+};
+int main(){
+    int n1,i,j;
+    printf("enter the number of terms:");
+    scanf("%d",&n1);
+    struct poly p1[ MAX],p2[ MAX],result[ MAX];
+    printf("enter the coeff and exponent:");
+    for(i=0;i<n1;i++){
+        scanf("%d%d",&p1[i].coeff,&p1[i].expo);
+    }
+    for(i=0;i<n1;i++){
+       for(j=i+1;j<n1;j++)
+       {
+           if(p1[i].expo<p1[j].expo)
+           {
+               int temp=p1[i].expo;
+               p1[i].expo=p1[j].expo;
+               p1[j].expo=temp;
+           }
+       }
+        }
+        for(i=0;i<n1;i++){
+     printf("%dx^%d",p1[i].coeff,p1[i].expo);
+    if (i!=n1-1){
+        printf("+");
+    }
+    }
+   
+}
