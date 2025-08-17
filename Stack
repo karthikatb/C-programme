@@ -1,0 +1,64 @@
+#include<stdio.h>
+#define MAX 100
+int stack[MAX],top=-1;
+void push(int value){
+    if(top==MAX-1){
+        printf("OVER FLOW\n");
+    }
+    else{
+        top++;
+        stack[top]=value;
+       printf("%d pushed",value);
+    }
+}
+void pop()
+{
+    if (top==-1){
+        printf("UNDER FLOW!\n");
+    }
+    else{
+        printf("%d removed\n",stack[top]);
+        top--;
+    }
+}
+void display()
+{
+    
+   printf("ITEM'S:\n");
+        if(top==-1){
+         printf("Empty");   
+        }
+        else{
+            for(int i=top;i>=0;i--){
+        printf("%d",stack[i]);
+    }}
+    
+}
+int main(){
+    int choice,value;
+     while(1){
+    printf("1. Push\n2. Pop\n3. Display\n4. Exit\n");
+    printf("Enter the choice:");
+    scanf("%d",&choice);
+   
+        switch (choice) {
+            case 1:
+                printf("Enter value to push: ");
+                scanf("%d", &value);
+                push(value);
+                break;
+            case 2:
+                pop();
+                break;
+            case 3:
+                display();
+                break;
+            case 4:
+                return 0;
+            default:
+                printf("Invalid choice! Try again.\n");
+        }
+    }
+}
+    
+
