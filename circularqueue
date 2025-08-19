@@ -1,0 +1,87 @@
+#include <stdio.h>
+#define MAX 5
+
+int deque[MAX];
+int dfront = -1, drear = -1;
+
+// Insert at Front
+void insertFront(int value) {
+    if ((dfront == 0 && drear == MAX - 1) || (dfront == drear + 1)) {
+        printf("Deque is FULL!\n");
+        return;
+    }
+    if (dfront == -1) {
+        dfront = drear = 0;
+    } else if (dfront == 0) {
+        dfront = MAX - 1; // wrap
+    } else {
+        dfront--;
+    }
+    deque[dfront] = value;
+    printf("%d inserted at FRONT\n", value);
+}
+
+// Insert at Rear
+void insertRear(int value) {
+    if ((dfront == 0 && drear == MAX - 1) || (dfront == drear + 1)) {
+        printf("Deque is FULL!\n");
+        return;
+    }
+    if (drear == -1) {
+        dfront = drear = 0;
+    } else if (drear == MAX - 1) {
+        drear = 0;
+    } else {
+        drear++;
+    }
+    deque[drear] = value;
+    printf("%d inserted at REAR\n", value);
+}
+
+// Delete Front
+void deleteFront() {
+    if (dfront == -1) {
+        printf("Deque is EMPTY!\n");
+        return;
+    }
+    printf("%d deleted from FRONT\n", deque[dfront]);
+    if (dfront == drear) {
+        dfront = drear = -1;
+    } else if (dfront == MAX - 1) {
+        dfront = 0;
+    } else {
+        dfront++;
+    }
+}
+
+// Delete Rear
+void deleteRear() {
+    if (drear == -1) {
+        printf("Deque is EMPTY!\n");
+        return;
+    }
+    printf("%d deleted from REAR\n", deque[drear]);
+    if (dfront == drear) {
+        dfront = drear = -1;
+    } else if (drear == 0) {
+        drear = MAX - 1;
+    } else {
+        drear--;
+    }
+}
+
+// Display Deque
+void displayDQ() {
+    if (dfront == -1) {
+        printf("Deque is EMPTY!\n");
+        return;
+    }
+    printf("Deque: ");
+    int i = dfront;
+    while (1) {
+        printf("%d ", deque[i]);
+        if (i == drear) break;
+        i = (i + 1) % MAX;
+    }
+    printf("\n");
+}
