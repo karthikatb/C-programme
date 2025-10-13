@@ -1,13 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-
 struct Node {
     int data;
     struct Node* left;
     struct Node* right;
 };
-
 
 struct Node* createNode(int data) {
     struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
@@ -15,7 +13,6 @@ struct Node* createNode(int data) {
     newNode->left = newNode->right = NULL;
     return newNode;
 }
-
 
 struct Node* insert(struct Node* root, int data) {
     if (root == NULL) {
@@ -29,10 +26,9 @@ struct Node* insert(struct Node* root, int data) {
     return root;
 }
 
-
 int search(struct Node* root, int data) {
     if (root == NULL) {
-        return 0; 
+        return 0;
     }
     if (data == root->data) {
         return 1;
@@ -43,14 +39,12 @@ int search(struct Node* root, int data) {
     return search(root->right, data);
 }
 
-
 struct Node* findMin(struct Node* root) {
     while (root->left != NULL) {
         root = root->left;
     }
     return root;
 }
-
 
 struct Node* delete(struct Node* root, int data) {
     if (root == NULL) {
@@ -61,7 +55,6 @@ struct Node* delete(struct Node* root, int data) {
     } else if (data > root->data) {
         root->right = delete(root->right, data);
     } else {
-  
         if (root->left == NULL) {
             struct Node* temp = root->right;
             free(root);
@@ -71,7 +64,7 @@ struct Node* delete(struct Node* root, int data) {
             free(root);
             return temp;
         }
-    
+
         struct Node* temp = findMin(root->right);
         root->data = temp->data;
         root->right = delete(root->right, temp->data);
@@ -87,6 +80,14 @@ void inorder(struct Node* root) {
     }
 }
 
+void postorder(struct Node* root) {
+    if (root != NULL) {
+        postorder(root->left);
+        postorder(root->right);
+        printf("%d ", root->data);
+    }
+}
+
 int main() {
     struct Node* root = NULL;
     int choice, value;
@@ -97,7 +98,8 @@ int main() {
         printf("2. Search\n");
         printf("3. Delete\n");
         printf("4. Display Inorder\n");
-        printf("5. Exit\n");
+        printf("5. Display Postorder\n");  // New menu option
+        printf("6. Exit\n");
         printf("Enter your choice: ");
         scanf("%d", &choice);
 
@@ -127,6 +129,11 @@ int main() {
                 printf("\n");
                 break;
             case 5:
+                printf("Postorder traversal: ");
+                postorder(root);
+                printf("\n");
+                break;
+            case 6:
                 exit(0);
             default:
                 printf("Invalid choice. Please try again.\n");
@@ -135,3 +142,4 @@ int main() {
 
     return 0;
 }
+
