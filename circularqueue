@@ -1,87 +1,108 @@
 #include <stdio.h>
-#define MAX 5
 
-int deque[MAX];
-int dfront = -1, drear = -1;
+#define SIZE 100
 
-// Insert at Front
-void insertFront(int value) {
-    if ((dfront == 0 && drear == MAX - 1) || (dfront == drear + 1)) {
-        printf("Deque is FULL!\n");
-        return;
-    }
-    if (dfront == -1) {
-        dfront = drear = 0;
-    } else if (dfront == 0) {
-        dfront = MAX - 1; // wrap
-    } else {
-        dfront--;
-    }
-    deque[dfront] = value;
-    printf("%d inserted at FRONT\n", value);
+int queue[SIZE];
+int front = -1;
+int rear = -1;
+
+int isFull() {
+    return (front == (rear + 1) % SIZE);
 }
 
-// Insert at Rear
-void insertRear(int value) {
-    if ((dfront == 0 && drear == MAX - 1) || (dfront == drear + 1)) {
-        printf("Deque is FULL!\n");
-        return;
-    }
-    if (drear == -1) {
-        dfront = drear = 0;
-    } else if (drear == MAX - 1) {
-        drear = 0;
-    } else {
-        drear++;
-    }
-    deque[drear] = value;
-    printf("%d inserted at REAR\n", value);
+int isEmpty() {
+    return front == -1;
 }
 
-// Delete Front
-void deleteFront() {
-    if (dfront == -1) {
-        printf("Deque is EMPTY!\n");
+void enqueue(int value) {
+    if (isFull()) {
+        printf("Queue Overflow! Cannot enqueue %d\n", value);
         return;
     }
-    printf("%d deleted from FRONT\n", deque[dfront]);
-    if (dfront == drear) {
-        dfront = drear = -1;
-    } else if (dfront == MAX - 1) {
-        dfront = 0;
-    } else {
-        dfront++;
+
+    if (isEmpty()) {
+        front = rear = 0;
+    } 
+    
+    else {
+        rear = (rear + 1) % SIZE;
     }
+
+    queue[rear] = value;
+    printf("Enqueued: %d\n", value);
 }
 
-// Delete Rear
-void deleteRear() {
-    if (drear == -1) {
-        printf("Deque is EMPTY!\n");
-        return;
+int dequeue() {
+    if (isEmpty()) {
+        printf("Queue Underflow! Cannot dequeue\n");
+        return -1;
     }
-    printf("%d deleted from REAR\n", deque[drear]);
-    if (dfront == drear) {
-        dfront = drear = -1;
-    } else if (drear == 0) {
-        drear = MAX - 1;
-    } else {
-        drear--;
+
+    int item = queue[front];
+
+    if (front == rear) {
+        front = rear = -1;
+    } 
+    
+    else {
+        front = (front + 1) % SIZE;
     }
+
+    return item;
 }
 
-// Display Deque
-void displayDQ() {
-    if (dfront == -1) {
-        printf("Deque is EMPTY!\n");
+void display() {
+    if (isEmpty()) {
+        printf("Queue is empty\n");
         return;
     }
-    printf("Deque: ");
-    int i = dfront;
+
+    printf("Circular Queue elements: ");
+    int i = front;
+    
     while (1) {
-        printf("%d ", deque[i]);
-        if (i == drear) break;
-        i = (i + 1) % MAX;
+        printf("%d ", queue[i]);
+        if (i == rear)
+            break;
+        i = (i + 1) % SIZE;
     }
     printf("\n");
+}
+
+int main() {
+    int choice, value, dequeuedValue;
+
+    while (1) {
+        printf("\nChoose an operation\n");
+        printf("1. Enqueue\n");
+        printf("2. Dequeue\n");
+        printf("3. Display queue\n");
+        printf("4. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+
+        if (choice == 1) {
+            printf("Enter value to enqueue: ");
+            scanf("%d", &value);
+            enqueue(value);
+        } 
+        else if (choice == 2) {
+            dequeuedValue = dequeue();
+            if (dequeuedValue != -1) {
+                printf("Dequeued: %d\n", dequeuedValue);
+            }
+        } 
+        else if (choice == 3) {
+            display();
+        } 
+        else if (choice == 4) {
+            printf("Exiting Program\n");
+            break;
+        } 
+        else {
+            printf("Invalid choice, Enter valid choice.\n");
+        }
+    }
+
+    return 0;
 }
