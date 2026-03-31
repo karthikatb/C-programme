@@ -1,0 +1,47 @@
+#include <stdio.h>
+
+int main() {
+    int n, i;
+    printf("Enter number of processes: ");
+    scanf("%d", &n);
+
+    int AT[n], BT[n], rem[n];
+    int complete = 0, t = 0;
+    float avg_wt = 0;
+
+    printf("Enter Arrival Time and Burst Time:\n");
+    for(i = 0; i < n; i++) {
+        scanf("%d %d", &AT[i], &BT[i]);
+        rem[i] = BT[i];
+    }
+
+    while(complete != n) {
+        int min = 9999, shortest = -1;
+
+        for(i = 0; i < n; i++) {
+            if(AT[i] <= t && rem[i] > 0 && rem[i] < min) {
+                min = rem[i];
+                shortest = i;
+            }
+        }
+
+        if(shortest == -1) {
+            t++;
+            continue;
+        }
+
+        rem[shortest]--;
+
+        if(rem[shortest] == 0) {
+            complete++;
+            int finish = t + 1;
+            avg_wt += finish - BT[shortest] - AT[shortest];
+        }
+
+        t++;
+    }
+
+    printf("Average Waiting Time = %.2f\n", avg_wt / n);
+
+    return 0;
+}
