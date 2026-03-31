@@ -1,0 +1,178 @@
+[3/31, 11:04 AM] Krishnapriya: #include <stdio.h>
+
+int main() {
+    int n, i, j;
+
+    printf("Enter number of processes: ");
+    scanf("%d", &n);
+
+    int AT[n], BT[n];
+
+    printf("Enter Arrival Time and Burst Time:\n");
+    for(i = 0; i < n; i++) {
+        scanf("%d %d", &AT[i], &BT[i]);
+    }
+
+    // Sort by Arrival Time (FCFS rule)
+    for(i = 0; i < n-1; i++) {
+        for(j = i+1; j < n; j++) {
+            if(AT[i] > AT[j]) {
+                int temp;
+                temp = AT[i]; AT[i] = AT[j]; AT[j] = temp;
+                temp = BT[i]; BT[i] = BT[j]; BT[j] = temp;
+            }
+        }
+    }
+
+    int time = 0, wt = 0;
+
+    for(i = 0; i < n; i++) {
+        if(time < AT[i])
+            time = AT[i];
+
+        wt += time - AT[i];
+        time += BT[i];
+    }
+
+    printf("Average Waiting Time = %.2f\n", (float)wt / n);
+
+    return 0;
+}
+[3/31, 11:04 AM] Krishnapriya: #include <stdio.h>
+
+int main() {
+    int n, i;
+
+    printf("Enter number of processes: ");
+    scanf("%d", &n);
+
+    int AT[n], BT[n], done[n];
+
+    printf("Enter Arrival Time and Burst Time:\n");
+    for(i = 0; i < n; i++) {
+        scanf("%d %d", &AT[i], &BT[i]);
+        done[i] = 0;   // not completed
+    }
+
+    int time = 0, completed = 0;
+    float wt = 0;
+
+    while(completed < n) {
+        int min = -1;
+
+        // Find process with smallest BT among arrived
+        for(i = 0; i < n; i++) {
+            if(!done[i] && AT[i] <= time) {
+                if(min == -1 || BT[i] < BT[min])
+                    min = i;
+            }
+        }
+
+        // If no process has arrived yet
+        if(min == -1) {
+            time++;
+            continue;
+        }
+
+        // Calculate waiting time
+        wt += time - AT[min];
+
+        // Execute process
+        time += BT[min];
+
+        done[min] = 1;
+        completed++;
+    }
+
+    printf("Average Waiting Time = %.2f\n", wt / n);
+
+    return 0;
+}
+[3/31, 11:05 AM] Krishnapriya: #include <stdio.h>
+
+int main() {
+    int n, i;
+
+    printf("Enter number of processes: ");
+    scanf("%d", &n);
+
+    int AT[n], BT[n], PR[n], done[n];
+
+    printf("Enter AT BT Priority:\n");
+    for(i = 0; i < n; i++) {
+        scanf("%d %d %d", &AT[i], &BT[i], &PR[i]);
+        done[i] = 0;
+    }
+
+    int time = 0, completed = 0;
+    float wt = 0;
+
+    while(completed < n) {
+        int high = -1;
+
+        // find highest priority (smallest value)
+        for(i = 0; i < n; i++) {
+            if(!done[i] && AT[i] <= time) {
+                if(high == -1 || PR[i] < PR[high])
+                    high = i;
+            }
+        }
+
+        // if no process arrived
+        if(high == -1) {
+            time++;
+            continue;
+        }
+
+        wt += time - AT[high];
+        time += BT[high];
+
+        done[high] = 1;
+        completed++;
+    }
+
+    printf("Average Waiting Time = %.2f\n", wt / n);
+
+    return 0;
+}
+[3/31, 11:05 AM] Krishnapriya: #include <stdio.h>
+
+int main() {
+    int n, i, time = 0, tq = 3, wt = 0;
+
+    printf("Enter number of processes: ");
+    scanf("%d", &n);
+
+    int AT[n], BT[n], rem[n];
+
+    printf("Enter AT and BT:\n");
+    for(i = 0; i < n; i++) {
+        scanf("%d %d", &AT[i], &BT[i]);
+        rem[i] = BT[i];   // remaining time
+    }
+
+    int done;
+    do {
+        done = 1;
+
+        for(i = 0; i < n; i++) {
+            if(rem[i] > 0) {
+                done = 0;
+
+                if(rem[i] > tq) {
+                    time += tq;
+                    rem[i] -= tq;
+                } else {
+                    time += rem[i];
+                    wt += time - AT[i] - BT[i];
+                    rem[i] = 0;
+                }
+            }
+        }
+
+    } while(!done);
+
+    printf("Average Waiting Time = %.2f\n", (float)wt / n);
+
+    return 0;
+}
