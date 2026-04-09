@@ -1,0 +1,25 @@
+.data
+LED_ADDR: .word 0xf0000000   # Base address
+
+.text
+.globl main
+
+main:
+    # Load base address
+    la t0, LED_ADDR
+    lw t1, 0(t0)
+
+    li t2, 0x00FF0000   # RED color (you can change)
+    li t3, 0            # counter
+
+fill_all:
+    sw t2, 0(t1)        # write color to LED
+    addi t1, t1, 4      # move to next LED
+    addi t3, t3, 1
+
+    li t4, 875          # total LEDs (25 × 35)
+    blt t3, t4, fill_all
+
+# stay here (so it doesn't overwrite)
+stop:
+    j stop
